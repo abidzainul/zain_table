@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'table_data.dart';
 
-class CustomDataTable extends StatefulWidget {
+class FixDataTable extends StatefulWidget {
   final TableData cornerCell;
   final List<TableData> colCells;
   final List<TableData> titleCells;
@@ -14,7 +13,7 @@ class CustomDataTable extends StatefulWidget {
   final double horizontalMargin;
   final double columnSpacing;
 
-  CustomDataTable({
+  FixDataTable({
     this.cornerCell,
     this.colCells,
     this.titleCells,
@@ -29,10 +28,10 @@ class CustomDataTable extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => CustomDataTableState();
+  State<StatefulWidget> createState() => FixDataTableState();
 }
 
-class CustomDataTableState extends State<CustomDataTable> {
+class FixDataTableState extends State<FixDataTable> {
   final _columnController = ScrollController();
   final _rowController = ScrollController();
   final _subTableYController = ScrollController();
@@ -170,5 +169,102 @@ class CustomDataTableState extends State<CustomDataTable> {
         ),
       ],
     );
+  }
+}
+
+class CellFixTable extends StatelessWidget {
+  final String text;
+  final Widget trailing;
+  final bool widthInfinity;
+  final bool border;
+  final double fontSize;
+  final double cellPaddingLeft;
+  final double width;
+  final double height;
+  final MainAxisAlignment alignment;
+  final FontWeight fontWeight;
+  final Color color;
+  final Color cellColor;
+  final Color borderColor;
+  final BorderSide borderBottom;
+  final BorderSide borderTop;
+
+  CellFixTable(this.text,{
+    this.fontSize,
+    this.cellPaddingLeft,
+    this.trailing,
+    this.border=false,
+    this.width,
+    this.height,
+    this.widthInfinity=true,
+    this.alignment,
+    this.fontWeight,
+    this.color,
+    this.cellColor,
+    this.borderColor,
+    this.borderBottom,
+    this.borderTop,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.only(left: cellPaddingLeft ?? 0.0),
+        width: widthInfinity ? double.infinity : (width!=null ? width : null),
+        height: height,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: alignment ?? MainAxisAlignment.center,
+          children: <Widget>[
+            Flexible(
+              fit: FlexFit.loose,
+              child: Text(
+                text ?? '',
+                softWrap: false,
+                overflow: TextOverflow.fade,
+                style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: fontWeight ?? FontWeight.normal,
+                    color: color ?? Colors.grey[900]),
+              ),
+            ),
+            trailing ?? SizedBox.shrink()
+          ],),
+        decoration: BoxDecoration(
+            color: cellColor,
+            border: border ? Border(bottom: BorderSide(color: borderColor ?? Colors.grey[300], width: 1.0)) : Border()
+        )
+    );
+  }
+}
+
+class TableData {
+  final String id;
+  final String name;
+  final String value;
+  final String type;
+  final Color color;
+  final double width;
+
+  TableData({this.id, this.name, this.value, this.type, this.color, this.width});
+
+  TableData.fromJsonMap(Map<String, dynamic> map)
+      : id = map["id"].toString(),
+        name = map["name"],
+        value = map["value"].toString(),
+        type = map["type"].toString(),
+        width = map["width"],
+        color = map["color"];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
+    data['value'] = value;
+    data['type'] = type;
+    data['width'] = width;
+    data['color'] = color;
+    return data;
   }
 }
