@@ -1,8 +1,8 @@
 name: zain_table
 description: Zain Table
 version: 0.0.1
-author:
-homepage:
+author: Abid Zainul <abidzainul94@gmail.com>
+homepage: https://github.com/abidzainul/zain_table.git
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
